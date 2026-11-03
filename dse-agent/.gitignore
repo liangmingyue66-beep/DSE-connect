@@ -1,0 +1,12 @@
+# 凭据 —— 严禁入库
+.env
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# 评测/日志产物
+eval/report.json
+logs/

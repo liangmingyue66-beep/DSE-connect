@@ -1,0 +1,30 @@
+# ===== 凭据（最重要：绝不能入库）=====
+.env
+*.env
+!*.env.example
+
+# ===== 虚拟环境 =====
+.venv/
+venv/
+dse-agent/.venv/
+
+# ===== 依赖与构建产物 =====
+node_modules/
+dist/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# ===== IDE / 系统 =====
+.idea/
+.vscode/
+Thumbs.db
+.DS_Store
+
+# ===== 工具产物 =====
+.workbuddy/
+
+# ===== 日志与评测产物 =====
+logs/
+*.log
+dse-agent/eval/report*.json

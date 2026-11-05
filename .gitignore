@@ -28,3 +28,13 @@ Thumbs.db
 logs/
 *.log
 dse-agent/eval/report*.json
+
+# ===== 本地工作文档（个人准备材料，不进公开仓库）=====
+Agent升级方案.md
+dse-agent/docs/简历素材.md
+dse-agent/docs/面试准备指南.md
+dse-agent/docs/Git使用教程.md
+dse-agent/docs/源码导读-graph.md
+dse-agent/docs/TODO.md
+dse-agent/docs/architecture.md
+dse-agent/docs/查询优化方案.md

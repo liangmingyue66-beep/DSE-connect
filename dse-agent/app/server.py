@@ -35,10 +35,9 @@ from app import auth, observability
 from app.graph import graph
 
 ROOT = Path(__file__).resolve().parent.parent
-# 优先托管 Vue 构建产物，没有则回退到旧的原生页面
+# 前端构建产物（npm run build 生成，不入库）。未构建时服务仍可启动，只提供 API。
 FRONTEND_DIST = ROOT / "frontend" / "dist"
-LEGACY_WEB = ROOT / "web"
-WEB_DIR = FRONTEND_DIST if FRONTEND_DIST.exists() else LEGACY_WEB
+WEB_DIR = FRONTEND_DIST if FRONTEND_DIST.exists() else None
 
 RECURSION_LIMIT = 30
 SESSION_TTL = int(os.getenv("SESSION_TTL_SECONDS", "3600"))
@@ -309,9 +308,18 @@ async def health():
         "users": len(USER_SESSIONS),
         "locks": len(SESSION_LOCKS),
         "session_ttl_seconds": SESSION_TTL,
-        "web_dir": str(WEB_DIR),
+        "web_dir": str(WEB_DIR) if WEB_DIR else None,
     }
 
 
 # 托管前端静态页（放最后，避免覆盖 API 路由）
-app.mount("/", StaticFiles(directory=str(WEB_DIR), html=True), name="web")
+if WEB_DIR is not None:
+    app.mount("/", StaticFiles(directory=str(WEB_DIR), html=True), name="web")
+else:
+    @app.get("/")
+    async def frontend_missing():
+        """没构建前端时给一句明确的提示，而不是抛 500。"""
+        return JSONResponse(
+            {"detail": "前端尚未构建：cd frontend && npm install && npm run build"},
+            status_code=503,
+        )
